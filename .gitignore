@@ -1,6 +1,9 @@
 # Compiled python modules.
 *.pyc
 
+# Pypi bash
+*.sh
+
 # Setup distribution folder
 /dist/
 
