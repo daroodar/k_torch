@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="k_torch",
-    version="0.0.4",
+    version="0.0.5",
     author="Osama dar, Muhammad Ismail",
     author_email="osamadar1996@gmail.com",
     description="A Keras-like wrapper for PyTorch",
