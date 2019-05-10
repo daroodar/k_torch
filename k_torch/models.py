@@ -41,7 +41,7 @@ class Sequential():
             layer_name = str(self.layer_iter)
 
         # extract activation and layer params
-        layer_type, current_layer_param, activation = layer[0], layer[1], layer[3]
+        layer_type, current_layer_param, activation = layer[0], layer[1], layer[2]
 
         # currently only for Dense and Dropout!!!!
         if layer_type == 'Dense':
