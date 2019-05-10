@@ -1,5 +1,9 @@
 # K torch init file
 
+
+### version 0.0.4 : 10-05-19
+# Fixed layer returning 3 params
+
 ### version 0.0.3 : 10-05-19
 # changed nb_epochs to epochs in models.fit
 # changed validation_data from dict to list in models.fit

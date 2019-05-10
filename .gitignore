@@ -4,6 +4,9 @@
 # Pypi bash
 *.sh
 
+# .idea files
+.idea/
+
 # Setup distribution folder
 /dist/
 
