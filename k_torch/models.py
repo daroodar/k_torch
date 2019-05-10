@@ -1,4 +1,4 @@
-import torch.nn as nn, torch.optim as optim, matplotlib.pyplot as plt
+import torch.nn as nn, numpy as np, matplotlib.pyplot as plt
 import torch
 from .initializers import initializers_dict
 
@@ -41,10 +41,14 @@ class Sequential():
             layer_name = str(self.layer_iter)
 
         # extract activation and layer params
-        current_layer_units, activation = layer[0], layer[1]
+        layer_type, current_layer_param, activation = layer[0], layer[1]
 
-        # currently only for Dense!!!!
-        nn_layer = nn.Linear(self.last_layers_units, current_layer_units)
+        # currently only for Dense and Dropout!!!!
+        if layer_type == 'Dense':
+            nn_layer = nn.Linear(self.last_layers_units, current_layer_param)
+            self.last_layers_units = current_layer_param
+        elif layer_type =='Dropout':
+            nn_layer = nn.Dropout(current_layer_param)
 
         self.model.add_module(layer_name,nn_layer)
 
@@ -52,9 +56,9 @@ class Sequential():
         if activation != None:
             self.model.add_module(layer_name+'_activation',activation)
 
-        # updating 2 params
+        # updating
         self.layer_iter = self.layer_iter + 1
-        self.last_layers_units = current_layer_units
+
 
     def compile(self,loss,optimizer):
         """
@@ -67,7 +71,7 @@ class Sequential():
         self.loss = loss_dict[loss]
         self.is_compiled = True
 
-    def fit(self,X_train,y_train,nb_epochs,verbose = False,validation_data = None, should_plot_history = False):
+    def fit(self,X_train,y_train,epochs,verbose = False,validation_data = None, should_plot_history = False):
         """
         trains the model based on given data. Will show progress based on given parameters
 
@@ -83,20 +87,24 @@ class Sequential():
         if self.is_compiled == False:
             raise ValueError("Model is not compiled! Please compile first") # change this value error
 
+        # converting X_train and y_train to np.float64 dtype
+        X_train = X_train.astype(np.float64)
+        y_train = y_train.astype(np.float64)
+
         # converting to Tensors
         X_train, y_train = map(torch.Tensor,[X_train,y_train])
 
         criterion = self.loss
 
         if validation_data != None:
-            X_test = validation_data['X_test']
-            y_test = validation_data['y_test']
+            X_test = validation_data[0]
+            y_test = validation_data[0]
             X_test, y_test = map(torch.Tensor, [X_test, y_test])
 
         training_losses, val_losses = [], []
 
         # training
-        for epoch in range(nb_epochs):
+        for epoch in range(epochs):
             # Forward Propagation for training loss
             y_pred = self.model(X_train)
 
