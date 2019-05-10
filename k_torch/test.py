@@ -1,4 +1,9 @@
+from k_torch.layers import Dense
+from k_torch.models import Sequential
+from k_torch.optimizers import Adam
+
 import numpy as np
+
 
 # data preparation
 X_train = [[3,4],[2,3],[4,3],[2,3],[3,4],[2,3],[7,8],[8,9],[9,9]]
@@ -13,13 +18,6 @@ X_val = np.asarray (X_val)
 y_val = np.asarray(y_val)
 y_val = y_val.reshape(-1,1)
 
-
-from layers import Dense
-from models import Sequential
-from optimizers import Adam
-
-
-
 model = Sequential()
 model.add(Dense(2), input_shape = (2,))
 model.add(Dense(5))
@@ -27,5 +25,5 @@ model.add(Dense(1))
 
 model.compile(loss ='mse', optimizer=Adam(lr = 0.01))
 
-model.fit(X_train,y_train,nb_epochs=500,verbose=False,should_plot_history=True,validation_data={'X_test' : X_val, 'y_test':y_val})
+model.fit(X_train,y_train,nb_epochs=500,verbose=False,should_plot_history=False,validation_data={'X_test' : X_val, 'y_test':y_val})
 
