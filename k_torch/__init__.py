@@ -1,5 +1,8 @@
 # K torch init file
 
+### version 0.0.6 : 13-05-19
+# Fixed error in predict function. Converted X_test to np.float type
+
 
 ### version 0.0.4 : 10-05-19
 # Fixed layer returning 3 params

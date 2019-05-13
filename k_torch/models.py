@@ -85,7 +85,7 @@ class Sequential():
         """
 
         if self.is_compiled == False:
-            raise ValueError("Model is not compiled! Please compile first") # change this value error
+            raise EnvironmentError("Model is not compiled! Please compile first") # change this value error
 
         # converting X_train and y_train to np.float64 dtype
         X_train = X_train.astype(np.float64)
@@ -149,6 +149,9 @@ class Sequential():
         :param X_test:
         :return:
         """
+
+        # converting X_train and y_train to np.float64 dtype
+        X_test = X_test.astype(np.float64)
 
         X_test = torch.Tensor(X_test)
         predictions = self.model(X_test).detach().numpy()
