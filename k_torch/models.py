@@ -22,19 +22,21 @@ class Sequential():
         self.layer_iter = 0
         self.is_compiled = False
 
-    def add(self,layer, input_shape = None, layer_name  = None):
+    def add(self,layer, input_shape = None, layer_name  = None,input_features = None):
         "adds a layer to the model"
 
         # if first layer, define input shape
         if self.layer_iter == 0:
 
-            if input_shape == None:
+            if input_shape == None and input_features == None:
                 # ValueError should not be used
-                raise ValueError("Please Specify Input shape for first layer!")
+                raise ValueError("Please Specify input_shape or input_features for first layer!")
 
-            else:
+            elif input_features == None: # if input_shape given (if both given , shape will be given preference)
                 self.last_layers_units = input_shape[0]
 
+            else: # if input_features_given
+                self.last_layers_units = input_features
 
         # if name not specifed, specify your own name which is the iteration number of layer
         if layer_name == None:
@@ -87,7 +89,7 @@ class Sequential():
         if self.is_compiled == False:
             raise EnvironmentError("Model is not compiled! Please compile first") # change this value error
 
-        # converting X_train and y_train to np.float64 dtype
+        # converting training params to np.float64 dtype
         X_train = X_train.astype(np.float64)
         y_train = y_train.astype(np.float64)
 
@@ -98,7 +100,12 @@ class Sequential():
 
         if validation_data != None:
             X_test = validation_data[0]
-            y_test = validation_data[0]
+            y_test = validation_data[1]
+
+            # converting testing params to np.float64 dtype
+            X_test = X_test.astype(np.float64)
+            y_test = y_test.astype(np.float64)
+
             X_test, y_test = map(torch.Tensor, [X_test, y_test])
 
         training_losses, val_losses = [], []

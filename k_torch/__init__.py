@@ -1,5 +1,8 @@
 # K torch init file
 
+### version 0.0.7 : 14-05-19
+# Fixed error in validation set given as input in fit method
+
 ### version 0.0.6 : 13-05-19
 # Fixed error in predict function. Converted X_test to np.float type
 
