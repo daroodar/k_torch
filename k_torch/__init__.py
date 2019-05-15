@@ -1,5 +1,8 @@
 # K torch init file
 
+### version 0.0.8 : 15-05-19
+# Changed layers names to string simple iterations
+
 ### version 0.0.7 : 14-05-19
 # Fixed error in validation set given as input in fit method
 
