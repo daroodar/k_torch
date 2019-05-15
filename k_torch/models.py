@@ -56,11 +56,11 @@ class Sequential():
 
         # if activation is None, it will be treated as linear activation and no module will be added for activation!
         if activation != None:
-            self.model.add_module(layer_name+'_activation',activation)
+            self.layer_iter = self.layer_iter + 1
+            activation_layer_name = str(self.layer_iter)
+            self.model.add_module(activation_layer_name,activation)
 
-        # updating
         self.layer_iter = self.layer_iter + 1
-
 
     def compile(self,loss,optimizer):
         """
