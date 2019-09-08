@@ -21,6 +21,8 @@ class Sequential():
         self.last_layers_units = 0
         self.layer_iter = 0
         self.is_compiled = False
+        self.is_fitted = False
+        self.epochs = -1
 
     def add(self,layer, input_shape = None, layer_name  = None,input_features = None):
         "adds a layer to the model"
@@ -65,9 +67,6 @@ class Sequential():
     def compile(self,loss,optimizer):
         """
         compiles the model with given loss function and optimizer
-        :param loss: given loss function (str)
-        :param optimizer: given optimizer (k_torch.optimizers)
-        :return:
         """
         self.optimizer = optimizer[0](self.model.parameters(),lr = optimizer[1],weight_decay = optimizer[2])
         self.loss = loss_dict[loss]
@@ -76,14 +75,6 @@ class Sequential():
     def fit(self,X_train,y_train,epochs,verbose = False,validation_data = None, should_plot_history = False):
         """
         trains the model based on given data. Will show progress based on given parameters
-
-        :param X_train:
-        :param y_train:
-        :param nb_epochs:
-        :param verbose:
-        :param validation_data:
-        :param should_plot_history:
-        :return:
         """
 
         if self.is_compiled == False:
@@ -149,6 +140,9 @@ class Sequential():
             plt.legend()
             plt.show()
 
+        # if fit performed successfully, update is_fitted param and set epochs
+        self.is_fitted = True
+        self.epochs = epochs
 
     def predict(self,X_test):
         """
@@ -182,3 +176,47 @@ class Sequential():
         initializes weights with the given initialization
         """
         self.model.apply(initializers_dict[initialization])
+
+    def summary_detailed(self):
+        """
+        prints and returns summary (network architecture and hyperparameters) of the model
+        """
+
+        # for architecture
+        summary_dict = {}
+        summary_dict['architecture'] = self.create_architecture_summary()
+
+        # for optimizer and loss info which will be present only if the model has been compiled!
+        if self.is_compiled:
+            summary_dict['optimizer'] = self.optimizer
+            summary_dict['loss'] = str(self.loss)
+
+        # if the model has been fit, number of epochs will be added to the dictionary
+        if self.is_fitted:
+            summary_dict['epochs'] = self.epochs
+
+        return summary_dict
+
+    def create_architecture_summary(self):
+        """
+        creates summary of model's architecture in a neat way
+        currently only works for linear,dropout and relu layers
+        """
+
+        architecture_summary = []
+
+        # recording input size
+        input_size = self.model[0].in_features
+        architecture_summary.append("INPUT (" + str(input_size) + ")")
+
+        # iterating through each layer
+        for each_layer in self.model:
+
+            if type(each_layer) == nn.modules.activation.ReLU:
+                architecture_summary .append("RELU")
+            elif type(each_layer) == nn.modules.dropout.Dropout:
+                architecture_summary .append("DROPOUT (" + str(each_layer.p) + ")")
+            else:
+                architecture_summary .append("LINEAR (" + str(each_layer.out_features) + ")")
+
+        return architecture_summary
