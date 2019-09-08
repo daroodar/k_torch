@@ -1,5 +1,12 @@
 # K torch init file
 
+
+### version 0.1.0 : 08-09-19
+# added history function too
+
+### version 0.0.9 : 08-09-19
+# added summary_detailed function
+
 ### version 0.0.8 : 15-05-19
 # Changed layers names to string simple iterations
 

@@ -1,6 +1,7 @@
 import torch.nn as nn, numpy as np, matplotlib.pyplot as plt
 import torch
 from .initializers import initializers_dict
+from .history import history
 
 
 loss_dict = {'mse':nn.MSELoss()}
@@ -130,19 +131,16 @@ class Sequential():
             # Update the parameters
             self.optimizer.step()
 
+        history_object = history(training_losses,val_losses)
+
         if should_plot_history:
-            plt.plot(training_losses, label='training_loss')
-            if validation_data!=None:
-                plt.plot(val_losses, label='validation_loss')
-            plt.ylabel('loss')
-            plt.xlabel('number of epochs')
-            plt.title('Loss History Visualization')
-            plt.legend()
-            plt.show()
+            history_object.plot(show=True)
 
         # if fit performed successfully, update is_fitted param and set epochs
         self.is_fitted = True
         self.epochs = epochs
+
+        return history_object
 
     def predict(self,X_test):
         """
